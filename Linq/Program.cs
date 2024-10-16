@@ -51,11 +51,73 @@
                 .Select(num => num * 0.33)
                 .OrderByDescending(num => num);
             Looper(manipulateNumbers);
+
+            var games = new List<VideoGame> { 
+                new VideoGame("Half-Life", 1998, "First-person Shooter", true),
+                new VideoGame("The Witcher 3: Wild Hunt", 2015, "Action RPG", false),
+                new VideoGame("Cyberpunk 2077", 2020, "Action RPG", false),
+                new VideoGame("Doom Eternal", 2020, "First-person Shooter", true),
+                new VideoGame("Minecraft", 2011, "Sandbox", true),
+                new VideoGame("Grand Theft Auto V", 2013, "Action-adventure", true),
+                new VideoGame("Overwatch", 2016, "First-person Shooter", true)
+            };
+
+            string searchOption = HandleSearchOptions();
+            SearchVideoGames(searchOption, games);
+        }
+
+        public static string HandleSearchOptions()
+        {
+            Console.WriteLine("Select how you'd like to search for your video game:");
+            Console.WriteLine("1. Title");
+            Console.WriteLine("2. Year");
+            Console.WriteLine("3. Genre");
+            Console.WriteLine("4. Multiplayer");
+
+            while(true)
+            {
+                string input = Console.ReadLine();
+                List<int> oneToFour = Enumerable.Range(1, 4).ToList();
+
+                foreach(int num in oneToFour)
+                {
+                    if(input == num.ToString())
+                    {
+                        return input;
+                    }
+                }
+
+                Console.WriteLine("Press a number between 1 - 4!");
+            }
+        }
+
+        public static void SearchVideoGames(string searchOption, List<VideoGame> games)
+        {
+            var filteredGames = new List<VideoGame>();
+
+            switch(searchOption)
+            {
+                case "1":
+                    break;
+                case "2":
+                    Console.WriteLine("Type a year:");
+                    string userInput = Console.ReadLine();
+                    filteredGames = games.Where(game => game.ReleaseYear == Int32.Parse(userInput)).ToList();
+                    break;
+                default:
+                    Console.WriteLine($"Default: {searchOption}");
+                    break;
+            }
+
+            foreach(var game in filteredGames)
+            {
+                Console.WriteLine($"{game.Title} {game.ReleaseYear} {game.Genre} {game.Multiplayer}");
+            }
         }
 
         public static void Looper<T>(IEnumerable<T> items)
         {
-            foreach (var item in items)
+            foreach (T item in items)
             {
                 Console.WriteLine(item);
             }
@@ -88,6 +150,22 @@
                     Console.WriteLine(item);
                 }
             }
+        }
+    }
+
+    class VideoGame
+    {
+        public string Title { get; }
+        public int ReleaseYear { get; }
+        public string Genre { get; }
+        public bool Multiplayer { get; }
+
+        public VideoGame(string title, int releaseYear, string genre, bool multiplayer)
+        {
+            Title = title;
+            ReleaseYear = releaseYear;
+            Genre = genre;
+            Multiplayer = multiplayer;
         }
     }
 
